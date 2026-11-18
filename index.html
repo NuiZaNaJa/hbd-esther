@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HBD Esther — esther@love</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%227%22 fill=%22%23120a1a%22/><path d=%22M16 25 L6.2 15.4 A5.4 5.4 0 0 1 16 9.6 A5.4 5.4 0 0 1 25.8 15.4 Z%22 fill=%22%23ff4fd8%22/></svg>">
+  <link rel="stylesheet" href="css/style.css?v=28">
+</head>
+<body data-scene="1">
+
+  <canvas id="fx-canvas" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- ================= ฉาก 1: LANDING ================= -->
+  <section class="scene scene-1 active" id="scene-1">
+    <div class="landing-note">
+      <p class="note-main">ใส่เทปเข้าเครื่องเล่น นะคับอ้วนๆ</p>
+    </div>
+
+    <!-- เครื่องเล่นเทป (วางแทนปุ่ม PRESS HBD) — หน้าตาแบบเด็คซิลเวอร์+ตู้ไม้ ยุค 70s -->
+    <div class="deck-widget" id="deck-widget">
+      <div class="deck-cabinet">
+        <div class="deck-face">
+          <div class="face-title">STEREO CASSETTE TAPE DECK</div>
+          <div class="face-grid">
+            <div class="face-left">
+              <div class="power-block">
+                <span class="micro-label">POWER</span>
+                <div class="power-marks">
+                  <i class="power-mark">OFF</i>
+                  <b class="power-btn" id="deck-power"></b>
+                  <i class="power-mark">ON</i>
+                </div>
+              </div>
+              <div class="bay" id="deck-bay">
+                <span class="bay-spindle left" aria-hidden="true"></span>
+                <span class="bay-spindle right" aria-hidden="true"></span>
+                <div class="bay-slot" id="deck-slot" aria-hidden="true"></div>
+                <div class="bay-glass" aria-hidden="true"></div>
+              </div>
+            </div>
+            <div class="face-right">
+              <div class="right-top">
+                <div class="counter-block">
+                  <span class="micro-label">TAPE COUNTER</span>
+                  <div class="counter-row">
+                    <span class="counter" id="deck-counter">000</span>
+                    <span class="mini-knob" aria-hidden="true"></span>
+                  </div>
+                </div>
+                <div class="vu-pair" aria-hidden="true">
+                  <div class="vu">
+                    <span class="vu-scale"><b>20</b><b>10</b><b>5</b><b>0</b><b class="red">+3</b></span>
+                    <span class="vu-arc"></span>
+                    <span class="vu-needle"></span>
+                    <b class="vu-name">VU</b>
+                  </div>
+                  <div class="vu vu-r">
+                    <span class="vu-scale"><b>20</b><b>10</b><b>5</b><b>0</b><b class="red">+3</b></span>
+                    <span class="vu-arc"></span>
+                    <span class="vu-needle"></span>
+                    <b class="vu-name">VU</b>
+                  </div>
+                </div>
+              </div>
+              <div class="face-switches" aria-hidden="true">
+                <div class="sw"><span class="sw-body"></span><span class="micro-label">BIAS</span></div>
+                <div class="sw"><span class="sw-body"></span><span class="micro-label">EQ</span></div>
+                <div class="sw"><span class="sw-body"></span><span class="micro-label">INPUT</span></div>
+                <span class="knob"></span>
+                <span class="knob k2"></span>
+                <span class="jack"></span>
+                <span class="jack"></span>
+                <span class="jack"></span>
+              </div>
+            </div>
+          </div>
+          <div class="transport">
+            <button class="tp-key" data-key="rec" type="button" tabindex="-1"><i class="tp-dot"></i>REC</button>
+            <button class="tp-key" data-key="rew" type="button" tabindex="-1">◀◀</button>
+            <button class="tp-key" data-key="play" type="button" tabindex="-1">▶</button>
+            <button class="tp-key" data-key="ff" type="button" tabindex="-1">▶▶</button>
+            <button class="tp-key" data-key="stop" type="button" tabindex="-1" title="ดีดเทปออก">STOP</button>
+            <button class="tp-key" data-key="pause" type="button" tabindex="-1">PAUSE</button>
+          </div>
+        </div>
+      </div>
+      <div class="tape-float" id="tape-float">
+        <div class="cassette" id="cassette" tabindex="0" role="button"
+             aria-label="เทปคาสเซ็ตต์ — ลากไปใส่ช่องบนเครื่องเล่น หรือกด Enter">
+          <div class="cass-label">
+            <span class="cass-print">esther ♥ timmy · side A</span>
+            <div class="cass-stripe"></div>
+            <div class="cass-window">
+              <span class="cass-pad left" aria-hidden="true"></span>
+              <span class="cass-reel" id="reel-l"></span>
+              <span class="cass-reel" id="reel-r"></span>
+              <span class="cass-pad right" aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="cass-bottom" aria-hidden="true">
+            <span class="cass-hole"></span>
+            <span class="cass-hole"></span>
+            <span class="cass-hole"></span>
+          </div>
+        </div>
+      </div>
+      <div class="deck-shelf" aria-hidden="true"></div>
+      <div class="deck-lines" id="deck-lines"></div>
+      <div class="deck-foot">
+        <button id="tape-skip" class="tape-btn ghost" type="button">ข้ามเพลง เข้าโชว์เลย ›</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- จอเปลี่ยนผ่าน: loading แบบ terminal (พิมพ์ทีละบรรทัดก่อนเข้าโชว์) -->
+  <div class="boot-screen hidden" id="boot-screen" aria-hidden="true">
+    <div class="boot-term"><div id="boot-lines"></div></div>
+  </div>
+
+  <!-- ================= ฉาก 2: ข้อความทีละประโยค → เค้ก ================= -->
+  <section class="scene scene-2" id="scene-2">
+    <div class="love-lines hidden" id="love-lines" aria-live="polite">
+      <div class="love-ascii" id="love-ascii"></div>
+      <p class="love-line" id="love-line"></p>
+      <figure class="love-media hidden" id="love-media">
+        <div class="nasa-frame media-frame">
+          <img class="media-img" id="media-img" alt="">
+          <span class="media-cap" id="media-cap"></span>
+        </div>
+      </figure>
+      <figure class="love-nasa hidden" id="love-nasa">
+        <div class="nasa-frame" id="nasa-frame">
+          <img class="nasa-img" id="nasa-img" alt="NASA APOD — ภาพอวกาศประจำวันที่ 18 พ.ย. 2549">
+          <div class="nasa-fallback" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+            <circle cx="16" cy="8" r="2.6" />
+            <path d="M2 22 9.5 14.5M5.5 22 11 16.5M9 22 13 18" />
+          </svg>
+        </div>
+        </div>
+        <figcaption class="nasa-cap">
+          <span class="nasa-label" id="nasa-label"></span>
+          <span class="nasa-text" id="nasa-cap"></span>
+        </figcaption>
+      </figure>
+    </div>
+
+    <!-- story IG: แถบเวลาด้านบน + ชั้นจับแตะซ้าย/ขวา (กดค้าง = หยุดพัก) -->
+    <div class="story-bars hidden" id="story-bars" aria-hidden="true"></div>
+    <div class="story-pause hidden" id="story-pause" aria-hidden="true">❚❚ พัก</div>
+    <div class="story-gestures hidden" id="story-gestures" aria-hidden="true"></div>
+
+    <div class="cake-window hidden" id="cake-window">
+      <div class="cake-bar">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <span class="term-title">cake.exe — 80×36 · 20fps</span>
+      </div>
+      <div class="cake-stage">
+        <div class="big-title" id="big-title" aria-live="polite" aria-label="Happy Birthday Esther"></div>
+        <div class="cake-body">
+          <pre class="cake-art" id="cake" aria-hidden="true"></pre>
+        </div>
+        <div class="scene2-actions hidden" id="show-actions">
+          <button class="cake-cam" id="btn-cam" type="button" aria-label="ถ่ายรูปเค้ก — เปิดกล้องโพลารอยด์">
+            <span class="cake-cam-bubble" aria-hidden="true"><i class="ccb">ถ่ายรูปได้นะค้่าบบบ</i></span>
+            <img class="cake-cam-img" src="img/instax-evo.png?v=28" alt="" draggable="false">
+            <canvas class="cake-cam-lcd" id="cake-cam-lcd" width="116" height="152" aria-hidden="true"></canvas>
+          </button>
+          <button class="soon-btn playable" id="btn-game" type="button">▶ <code>เล่นเกมกัน</code><small>มินิเกม · เก็บหัวใจให้ได้เยอะสุด!</small></button>
+          <button id="replay-btn" class="btn-ghost pink" type="button">↺ reboot — เล่นอีกครั้ง</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <button id="skip-btn" class="skip-btn hidden" type="button">skip ▸▸</button>
+
+  <!-- ================= มินิเกม: catch.love ================= -->
+  <div class="game-window hidden" id="game-window" role="dialog" aria-modal="true" aria-label="มินิเกม catch.love">
+    <div class="game-bar">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+      <span class="term-title">catch.love — เก็บหัวใจให้ได้ ♥</span>
+      <button id="game-close" class="game-close" type="button" aria-label="ปิดเกม">✕</button>
+    </div>
+    <div class="game-hud">
+      <span id="hud-score">LOVE: 0</span>
+      <span id="hud-combo"></span>
+      <span id="hud-time">TIME 45</span>
+      <span id="hud-lives"></span>
+    </div>
+    <div class="game-stage" id="game-stage">
+      <canvas id="game-canvas" aria-label="พื้นที่เกมจับหัวใจ"></canvas>
+      <div class="game-overlay" id="game-overlay">
+        <div class="game-card" id="game-card"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= กล้อง take photo: โพลารอยด์ GIF ================= -->
+  <div class="cam-window hidden" id="cam-window" role="dialog" aria-modal="true" aria-label="take photo — กล้องโพลารอยด์">
+    <div class="game-bar">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+      <span class="term-title">take photo — โพลารอยด์สำหรับสตอรี่ ♥</span>
+      <button id="cam-close" class="game-close" type="button" aria-label="ปิดกล้อง">✕</button>
+    </div>
+
+    <div class="cam-stage">
+      <!-- ตัวกล้อง: ใช้รูป img/instax-evo.png ที่ตัดไว้ (ถ้าไม่มีไฟล์ วาดด้วย CSS แทน) -->
+      <div class="cam-face" id="cam-face">
+        <div class="cam-body-css" aria-hidden="true">
+          <span class="cb-slot"></span>
+          <span class="cb-print-label">PRINT→</span>
+          <span class="cb-menu"></span>
+          <span class="cb-mini cb-m1"></span>
+          <span class="cb-mini cb-m2"></span>
+          <span class="cb-mini cb-m3"></span>
+        </div>
+        <img id="cam-body-img" class="cam-body-img" src="img/instax-evo.png?v=28" alt="กล้อง instax mini Evo" draggable="false">
+        <div class="cam-lcd" id="cam-lcd" title="กดที่จอเพื่อถ่ายเลย">
+          <canvas id="cam-lcd-canvas" width="300" height="396"></canvas>
+          <span class="cam-corner c1"></span>
+          <span class="cam-corner c2"></span>
+          <span class="cam-corner c3"></span>
+          <span class="cam-corner c4"></span>
+          <div class="cam-lcd-status" id="cam-lcd-status">READY ♥</div>
+        </div>
+        <span class="cam-slot" aria-hidden="true"></span>
+        <button id="cam-shutter" class="cam-shutter" type="button" aria-label="กดชัตเตอร์ถ่ายรูป">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 8.5h3.1L8.6 6h6.8l1.5 2.5H20a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5a1 1 0 0 1 1-1z" />
+            <circle cx="12" cy="13.2" r="3.4" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- ฟิล์มที่ไหลออกจากช่องกล้อง (clip ที่ขอบบน = โผล่จากตัวกล้อง) -->
+      <div class="cam-print-area" id="cam-print-area">
+        <div class="cam-polaroid hidden" id="cam-polaroid">
+          <canvas id="cam-polaroid-canvas" width="720" height="1280"></canvas>
+          <div class="cam-develop" id="cam-develop"></div>
+        </div>
+      </div>
+
+      <div class="cam-print-actions hidden" id="cam-print-actions">
+        <button id="cam-save" class="btn-ghost pink" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v11" />
+            <path d="M7.5 9.5 12 14l4.5-4.5" />
+            <path d="M4 17v2.2a.8.8 0 0 0 .8.8h14.4a.8.8 0 0 0 .8-.8V17" />
+          </svg>
+          <span id="cam-save-label">บันทึก GIF — ลงสตอรี่ได้เลย!</span>
+        </button>
+        <button id="cam-retake" class="game-close" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 12a8 8 0 1 1-2.4-5.7" />
+            <path d="M20 4v4.6h-4.6" />
+          </svg>
+          ถ่ายใหม่
+        </button>
+      </div>
+
+      <div class="cam-hint">กดชัตเตอร์ที่มุมขวาล่างของกล้อง — ฟิล์มจะไหลออกมาเอง ♥</div>
+    </div>
+  </div>
+
+  <!-- แฟลชขาวทั้งหน้าจอ -->
+  <div id="cam-flash" class="cam-flash" aria-hidden="true"></div>
+
+  <!-- ================= ห้องภาพ instax: ls /memories ================= -->
+  <div class="instax-window hidden" id="instax-window" role="dialog" aria-modal="true" aria-label="ห้องภาพ ls /memories">
+    <div class="game-bar">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+      <span class="term-title">ls /memories — ห้องภาพ instax ♥</span>
+      <button id="instax-close" class="game-close" type="button" aria-label="ปิดห้องภาพ">✕</button>
+    </div>
+
+    <div class="instax-body">
+      <!-- ตัวกล้อง (จำลองหลัง Mini Evo ตามรูปตัวจริง) -->
+      <div class="ix-camera">
+        <div class="ix-panel">
+          <div class="ix-lever" aria-hidden="true"><i></i></div>
+          <div class="ix-lcd">
+            <div class="ix-lcd-status" id="ix-lcd-status"></div>
+            <div class="ix-lcd-row" id="ix-lens-dial"><span class="ix-lcd-tag">LENS</span></div>
+            <div class="ix-lcd-row" id="ix-film-dial"><span class="ix-lcd-tag">FILM</span></div>
+          </div>
+          <div class="ix-btnrow">
+            <button id="ix-print" class="ix-okbtn" type="button"><span class="ix-okbtn-label">MENU<br>OK</span></button>
+            <span class="ix-mini-btn" aria-hidden="true">↩</span>
+            <span class="ix-mini-btn" aria-hidden="true">▷□</span>
+            <span class="ix-mini-btn" aria-hidden="true">＋</span>
+          </div>
+        </div>
+        <div class="ix-edge" aria-hidden="true">
+          <span class="ix-edge-top"><span class="ix-capsule"></span><span class="ix-knob"></span></span>
+          <span class="ix-slider"><i></i></span>
+          <span class="ix-print-label">PRINT→</span>
+        </div>
+      </div>
+
+      <!-- ช่องปริ้น -->
+      <div class="ix-slot" aria-hidden="true"></div>
+
+      <!-- พื้นที่รูปไหลออก -->
+      <div class="ix-output" id="ix-output">
+        <div class="ix-placeholder" id="ix-placeholder">รูปจะไหลออกจากกล้องตรงนี้ — กด PRINT เพื่อปริ้นใบแรก ♥</div>
+        <div class="ix-polaroid hidden" id="ix-polaroid"></div>
+      </div>
+
+      <!-- ราวแขวนรูป -->
+      <div class="ix-wall" id="ix-wall">
+        <div class="ix-wire" aria-hidden="true"></div>
+        <div class="ix-wall-row" id="ix-wall-row"></div>
+      </div>
+      <div class="ix-status" id="ix-status"></div>
+      <div class="ix-hint">เพิ่มรูปเองได้: ใส่ไฟล์ <code>img/01.jpg</code>, <code>img/02.jpg</code> … แล้วแก้แคปชันที่ <code>js/config.js</code></div>
+    </div>
+
+    <!-- ซูมดูรูป -->
+    <div class="ix-lightbox hidden" id="ix-lightbox">
+      <div class="ix-polaroid ix-lb-card" id="ix-lightbox-card"></div>
+    </div>
+  </div>
+
+  <!-- ปุ่มเปิด/ปิดเพลง (ลอยมุมจอ หลังใส่เทป) -->
+  <button id="tape-toggle" class="tape-toggle hidden" type="button" data-state="playing" aria-label="เปิด/ปิดเพลง"><i class="tt-ic" aria-hidden="true"></i>เพลง</button>
+
+  <script src="js/config.js?v=28"></script>
+  <script src="js/ascii-kit.js?v=28"></script>
+  <script src="js/cake-piece.js?v=28"></script>
+  <script src="js/big-text.js?v=28"></script>
+  <script src="js/cake.js?v=28"></script>
+  <script src="js/fireworks.js?v=28"></script>
+  <script src="js/terminal.js?v=28"></script>
+  <script src="js/minigame.js?v=28"></script>
+  <script src="js/instax.js?v=28"></script>
+  <script src="js/gif.js?v=28"></script>
+  <script src="js/camera.js?v=28"></script>
+  <script src="js/tape.js?v=28"></script>
+  <script src="js/scenes.js?v=28"></script>
+</body>
+</html>
